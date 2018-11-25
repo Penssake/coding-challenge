@@ -3,6 +3,7 @@
 const cors = require('cors')
 const express = require('express')
 const jsonParser = require('body-parser').json()
+const githubRouter = require('../routes/github-router.js')
 
 const app = express()
 let serverOn = null
@@ -10,6 +11,8 @@ let serverOn = null
 app.use(jsonParser)
 
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
+
+app.use(githubRouter)
 
 module.exports = {
   start: () => {

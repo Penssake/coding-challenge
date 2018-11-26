@@ -1,11 +1,11 @@
 # coding-challenge
-An application that displays the avatar of public GitHub repository owners.
+An application that displays the avatars of public GitHub repository owners.
 
 ### Works Cited 
 
-https://www.npmjs.com/package/request
-https://developer.github.com/
-https://github.com/parcel-bundler/parcel
+- https://www.npmjs.com/package/request
+- https://developer.github.com/
+- https://github.com/parcel-bundler/parcel
 
-used for testing locally:
-https://httpie.org/doc
+### Used for testing locally
+- https://httpie.org/doc

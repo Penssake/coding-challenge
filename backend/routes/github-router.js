@@ -3,7 +3,7 @@ const Request = require('request')
 const jsonParser = require('body-parser').json()
 
 const gitHubRouter = module.exports = new Router()
-const URL = 'https://api.github.com/users/Penssake'
+const URL = 'https://api.github.com/repositories?since=999'
 
 gitHubRouter.get('/api/github/users', (request, response, next) => {
     Request.get({
@@ -16,6 +16,6 @@ gitHubRouter.get('/api/github/users', (request, response, next) => {
         if(error) {
             return console.dir(error);
         }
-        console.dir(body);
+        console.dir(JSON.parse(body));
     });
 })

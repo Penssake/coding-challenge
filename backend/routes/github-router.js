@@ -9,7 +9,6 @@ const URL = 'https://api.github.com/users?since=999&per_page=50'
 // const URL = 'https://api.github.com/users/Penssake'
 
 const getGithubData = (response) => {
-    console.log('ad one in here')
     let data = undefined;
     return superagent
     .get(URL)
@@ -31,20 +30,39 @@ const getGithubData = (response) => {
 }
 
 const filteredFrontendData = (data) => {
+    // RENAME X
     const result = [];
     for(let x of JSON.parse(data)) {
-        console.log(x);
-        result.push({
-            login: x.login, 
-            avatar: x.avatar_url
-        });
+        if(x.login.startsWith('a') || x.login.startsWith('A')) {
+            return superagent
+                .get(x.followers_url)
+                .then(followersResponse => {
+                    let followersData = [];
+                    for(let follower of followersResponse.body) {
+                        followersData.push({
+                            followerLogin: follower.login,
+                            followerAvatar: follower.avatar_url,
+                        })
+                    }
+                   result.push({
+                       login: x.login, 
+                       avatar: x.avatar_url,
+                       followers: followersData
+                   });
+                })
+            }
+            else{
+            result.push({
+                login: x.login, 
+                avatar: x.avatar_url
+                
+            });
+        }
     }
-    console.log(result)
     return result
 }
 
 gitHubRouter.get('/api/github/users',(request, response, next) => {
-    console.log('something')
     return fse.pathExists(`${__dirname}/../data/time.txt`)
     .then(pathExists => {
         if(pathExists) {

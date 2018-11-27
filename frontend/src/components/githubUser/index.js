@@ -2,14 +2,15 @@ import React, {Component} from 'react'
 import {BrowserRouter, Route} from 'react-router-dom'
 import superagent from 'superagent'
 
-
 const __API_URL__ = 'http://localhost:3000'
-let initialState = null
 
 class GithubUser extends Component {
   constructor(props) {
     super(props)
-    this.state = {initialState}
+    this.state = {
+      login: null,
+      avatar: null,
+    }
 
   }
 
@@ -17,7 +18,12 @@ class GithubUser extends Component {
     console.log('API ATTEMPT', __API_URL__)
     return superagent
       .get(`${__API_URL__}/api/github/users`)
-      .then(response => console.log('banana',response))
+      .then(response => {
+        this.setState({
+          login: response.body.login,
+          avatar: response.body.avatar,
+        })
+      })
       .catch(err => console.log(err))
   }
 

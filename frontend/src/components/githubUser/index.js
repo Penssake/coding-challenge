@@ -7,11 +7,7 @@ const __API_URL__ = 'http://localhost:3000'
 class GithubUser extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      login: null,
-      avatar: null,
-    }
-
+    this.state = null
   }
 
   componentDidMount() {
@@ -19,19 +15,25 @@ class GithubUser extends Component {
     return superagent
       .get(`${__API_URL__}/api/github/users`)
       .then(response => {
+        console.log(response)
         this.setState({
-          login: response.body.login,
-          avatar: response.body.avatar,
+          userState: response.body,
         })
       })
       .catch(err => console.log(err))
   }
 
   render() {
+    let renderData = undefined
+    if(this.state) {
+      renderData = this.state.userState.map((mappedUser) => <li>{mappedUser.login}</li>)
+    }
     return (
       <div className="container">
-        <h1>HEY</h1>
-        <div></div>
+        <h1>GithubUser List</h1>
+        <ul>
+          {renderData}
+        </ul>
       </div>
 
     )

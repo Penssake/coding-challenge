@@ -30,36 +30,37 @@ const getGithubData = (response) => {
 }
 
 const filteredFrontendData = (data) => {
-    // RENAME X
     const result = [];
-    for(let x of JSON.parse(data)) {
-        if(x.login.startsWith('a') || x.login.startsWith('A')) {
-            return superagent
-                .get(x.followers_url)
-                .then(followersResponse => {
-                    let followersData = [];
-                    for(let follower of followersResponse.body) {
-                        followersData.push({
-                            followerLogin: follower.login,
-                            followerAvatar: follower.avatar_url,
-                        })
-                    }
-                   result.push({
-                       login: x.login, 
-                       avatar: x.avatar_url,
-                       followers: followersData
-                   });
-                })
-            }
-            else{
+    for(let user of JSON.parse(data)) {
             result.push({
-                login: x.login, 
-                avatar: x.avatar_url
+                login: user.login, 
+                avatar: user.avatar_url
                 
             });
         }
-    }
+        console.log('array result',result)
     return result
+}
+
+const getFliteredDataFollowers = (data) => {
+    if(x.login.startsWith('a') || x.login.startsWith('A')) {
+        return superagent
+            .get(x.followers_url)
+            .then(followersResponse => {
+                let followersData = [];
+                for(let follower of followersResponse.body) {
+                    followersData.push({
+                        followerLogin: follower.login,
+                        followerAvatar: follower.avatar_url,
+                    })
+                }
+               result.push({
+                   login: x.login, 
+                   avatar: x.avatar_url,
+                   followers: followersData
+               });
+            })
+        }
 }
 
 gitHubRouter.get('/api/github/users',(request, response, next) => {

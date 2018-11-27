@@ -17,7 +17,7 @@ class GithubUser extends Component {
     console.log('API ATTEMPT', __API_URL__)
     return superagent
       .get(`${__API_URL__}/api/github/users`)
-      .then(response => console.log(response.text))
+      .then(response => console.log('banana',response))
       .catch(err => console.log(err))
   }
 

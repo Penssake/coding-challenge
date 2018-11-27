@@ -9,12 +9,13 @@ const URL = 'https://api.github.com/users?since=999&per_page=50'
 // const URL = 'https://api.github.com/users/Penssake'
 
 const getGithubData = (response) => {
-    let data
-        return superagent
+    console.log('ad one in here')
+    let data = undefined;
+    return superagent
     .get(URL)
     .then(response => {
-        data = JSON.stringify(response.body)
-        fse.writeJson(`${__dirname}/../data/user.txt`, util.inspect(data))
+        data = response.body
+        fse.writeJson(`${__dirname}/../data/user.txt`, JSON.stringify(data))
         .then(results => {
             console.log('SUCCESS your data has been saved, format JSON')
         }).catch(err => console.error(err))
@@ -24,9 +25,22 @@ const getGithubData = (response) => {
         fse.writeJson(`${__dirname}/../data/time.txt`, jsonDate, (err) => {
             if(err) throw err
             console.log('Your date has been saved, format JSON')
+            return response.json(filteredFrontendData(data));
         })},
     ).catch(err => console.error(err))
-    response.send(data)
+}
+
+const filteredFrontendData = (data) => {
+    const result = [];
+    for(let x of JSON.parse(data)) {
+        console.log(x);
+        result.push({
+            login: x.login, 
+            avatar: x.avatar_url
+        });
+    }
+    console.log(result)
+    return result
 }
 
 gitHubRouter.get('/api/github/users',(request, response, next) => {
@@ -42,7 +56,7 @@ gitHubRouter.get('/api/github/users',(request, response, next) => {
                 if(now.isBetween(storedDate, storedDatePlusDelta)) {
                     return fse.readJson(`${__dirname}/../data/user.txt`) 
                     .then(data => {
-                        response.send(data)
+                        return response.json(filteredFrontendData(data));
                     })
                 } else {
                     return getGithubData()

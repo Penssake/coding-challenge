@@ -1,21 +1,55 @@
 const {Router} = require('express')
-const Request = require('request')
-const jsonParser = require('body-parser').json()
+const superagent = require('superagent')
+const fse = require('fs-extra')
+const util = require('util')
+const moment = require('moment')
 
 const gitHubRouter = module.exports = new Router()
-const URL = 'https://api.github.com/repositories?since=999'
+const URL = 'https://api.github.com/users?since=999&per_page=50'
+// const URL = 'https://api.github.com/users/Penssake'
 
-gitHubRouter.get('/api/github/users', (request, response, next) => {
-    Request.get({
-        "headers": { 
-            "content-type": "application/json",
-            "user-agent": "Penssake"
-        },
-        "url": URL,
-    }, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
+const getGithubData = (response) => {
+    let data
+        return superagent
+    .get(URL)
+    .then(response => {
+        data = JSON.stringify(response.body)
+        fse.writeJson(`${__dirname}/../data/user.txt`, util.inspect(data))
+        .then(results => {
+            console.log('SUCCESS your data has been saved, format JSON')
+        }).catch(err => console.error(err))
+        return new Date().toJSON();
+    })
+    .then(jsonDate => {
+        fse.writeJson(`${__dirname}/../data/time.txt`, jsonDate, (err) => {
+            if(err) throw err
+            console.log('Your date has been saved, format JSON')
+        })},
+    ).catch(err => console.error(err))
+    response.send(data)
+}
+
+gitHubRouter.get('/api/github/users',(request, response, next) => {
+    console.log('something')
+    return fse.pathExists(`${__dirname}/../data/time.txt`)
+    .then(pathExists => {
+        if(pathExists) {
+            return fse.readJson(`${__dirname}/../data/time.txt`)
+            .then(dateObj => {
+                let storedDate = moment(dateObj)
+                let storedDatePlusDelta = moment(storedDate).add(1, 'hours')
+                let now = moment()
+                if(now.isBetween(storedDate, storedDatePlusDelta)) {
+                    return fse.readJson(`${__dirname}/../data/user.txt`) 
+                    .then(data => {
+                        response.send(data)
+                    })
+                } else {
+                    return getGithubData()
+                }
+            })
+        } else {
+            return getGithubData()
         }
-        console.dir(JSON.parse(body));
-    });
+    })
 })

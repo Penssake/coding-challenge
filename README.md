@@ -12,6 +12,7 @@ An application that displays the avatars of public GitHub repository owners.
 - URL='https://api.github.com/users?since=999&per_page=32'
 
 ## Backend - to run
+- npm i
 - npm start
 
 ### Works Cited 

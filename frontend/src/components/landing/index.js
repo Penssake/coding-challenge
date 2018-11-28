@@ -5,8 +5,7 @@ import GithubUser from '../githubUser'
 class Landing extends Component {
   render() {
     return (
-      <div className="container">
-        <h1>Landing</h1>
+      <div className="landing">
         <GithubUser />
       </div>
 

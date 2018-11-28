@@ -1,0 +1,20 @@
+.app {
+    max-width: 90%;
+    margin-left: 5%;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img {
+    width: 100%;
+}
+p {
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+}
+span {
+    width: 12%;
+    contain: content;
+}

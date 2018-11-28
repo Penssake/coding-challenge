@@ -5,13 +5,11 @@ const util = require('util')
 const moment = require('moment')
 
 const gitHubRouter = module.exports = new Router()
-const URL = 'https://api.github.com/users?since=999&per_page=50'
-// const URL = 'https://api.github.com/users/Penssake'
 
 const getGithubData = (response) => {
     let data = undefined;
     return superagent
-    .get(URL)
+    .get(process.env.URL)
     .then(response => {
         data = response.body
         fse.writeJson(`${__dirname}/../data/user.txt`, JSON.stringify(data))
@@ -40,27 +38,6 @@ const filteredFrontendData = (data) => {
         }
         console.log('array result',result)
     return result
-}
-
-const getFliteredDataFollowers = (data) => {
-    if(x.login.startsWith('a') || x.login.startsWith('A')) {
-        return superagent
-            .get(x.followers_url)
-            .then(followersResponse => {
-                let followersData = [];
-                for(let follower of followersResponse.body) {
-                    followersData.push({
-                        followerLogin: follower.login,
-                        followerAvatar: follower.avatar_url,
-                    })
-                }
-               result.push({
-                   login: x.login, 
-                   avatar: x.avatar_url,
-                   followers: followersData
-               });
-            })
-        }
 }
 
 gitHubRouter.get('/api/github/users',(request, response, next) => {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {BrowserRouter, Route} from 'react-router-dom'
 import superagent from 'superagent'
+import './index.scss'
 
 const __API_URL__ = 'http://localhost:3000'
 
@@ -26,14 +27,21 @@ class GithubUser extends Component {
   render() {
     let renderData = undefined
     if(this.state) {
-      renderData = this.state.userState.map((mappedUser) => <li>{mappedUser.login}</li>)
-    }
+      renderData = this.state.userState.map((mappedUser) => (
+        <span>
+          <img src={mappedUser.avatar} data-user={'banana'}></img>
+          <p className='caption'>{mappedUser.login}</p>
+        </span>)
+      )}
     return (
-      <div className="container">
-        <h1>GithubUser List</h1>
-        <ul>
-          {renderData}
-        </ul>
+      <div>
+        <div className='row'>
+          <div className='col-xs-3'>
+            <div className='container'>
+              {renderData}
+            </div>
+          </div>
+        </div>
       </div>
 
     )

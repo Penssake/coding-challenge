@@ -16,6 +16,8 @@ An application that displays the avatars of public GitHub repository owners.
 - mkdir data
 - npm start
 
+Your site will be running on http://localhost:1234
+
 ### Works Cited 
 
 - https://developer.github.com/

@@ -13,6 +13,7 @@ An application that displays the avatars of public GitHub repository owners.
 
 ## Backend - to run
 - npm i
+- mkdir data
 - npm start
 
 ### Works Cited 

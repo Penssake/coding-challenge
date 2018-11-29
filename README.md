@@ -13,7 +13,6 @@ An application that displays the avatars of public GitHub repository owners.
 
 ## Backend - to run
 - npm i
-- mkdir data
 - npm start
 
 Your site will be running on http://localhost:1234
@@ -24,6 +23,8 @@ Your site will be running on http://localhost:1234
 - https://github.com/parcel-bundler/parcel
 - https://getbootstrap.com/
 - https://momentjs.com/docs/#/manipulating/
+- https://react-bootstrap.github.io/components/popovers/
+-
 
 ### Used for testing locally
 - https://httpie.org/doc

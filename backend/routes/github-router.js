@@ -7,7 +7,7 @@ const moment = require('moment')
 const gitHubRouter = module.exports = new Router()
 
 const getGithubData = (response) => {
-    let data = undefined;
+    let data
     return superagent
     .get(process.env.URL)
     .then(response => {
@@ -28,19 +28,26 @@ const getGithubData = (response) => {
 }
 
 const filteredFrontendData = (data) => {
-    const result = [];
+    const result = []
     for(let user of JSON.parse(data)) {
             result.push({
                 login: user.login, 
                 avatar: user.avatar_url
-                
             });
         }
-        console.log('array result',result)
     return result
 }
 
-gitHubRouter.get('/api/github/users',(request, response, next) => {
+const filterFollowersData = (data) => {
+    const result = []
+    for(let follower in data.body) {
+        result.push(data.body[follower].login);
+    }
+    console.log(Array.isArray(result))
+    return result
+}
+
+gitHubRouter.get('/api/github/users', (request, response, next) => {
     return fse.pathExists(`${__dirname}/../data/time.txt`)
     .then(pathExists => {
         if(pathExists) {
@@ -62,4 +69,17 @@ gitHubRouter.get('/api/github/users',(request, response, next) => {
             return getGithubData()
         }
     })
+})
+
+gitHubRouter.get('/api/github/user/followers/:user', (request, response, next) => {
+    if(request.params.user.startsWith('a') || request.params.user.startsWith('A')) {
+        let user = request.params.user
+        return superagent
+        .get(`https://api.github.com/users/${user}/followers`)
+        .then(data => {
+            return response.json(filterFollowersData(data))
+        }).catch(err => console.error(err))
+    } else {
+        console.log('NO A')
+    }
 })
